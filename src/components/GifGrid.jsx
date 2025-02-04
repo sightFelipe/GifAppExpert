@@ -1,18 +1,33 @@
 /* eslint-disable react/prop-types */
 import { getGifs } from "../helpers/getGifs";
-import {useState} from 'react';
+import { useState, useEffect } from "react";
 
 export const GifGrid = ({ category }) => {
+  const [images, setImages] = useState([]);
 
-  const [counter, setCounter] = useState(10);
+  const getImages = async () => {
+    const newImages = await getGifs(category);
+    setImages(newImages);
+  };
 
-  getGifs(category);
+  useEffect(() => {
+    getImages();
+  }, []);
+
   return (
     <>
       <h3>{category}</h3>
 
-      <h5>{counter}</h5>
-      <button onClick={ ()=> setCounter(counter + 1)}> +1 </button>
+      {/* images.map */}
+
+          <ol>
+          {images.map((img) => (
+            <li key={img.id}> 
+            {img.title}
+            </li>
+          ))}
+          </ol>
+          
     </>
   );
 };
