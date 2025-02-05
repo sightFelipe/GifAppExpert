@@ -1,33 +1,25 @@
 /* eslint-disable react/prop-types */
-import { getGifs } from "../helpers/getGifs";
-import { useState, useEffect } from "react";
+import GifItem from "./GifItem";
+import useFetchGifs from "../hooks/useFetchGifs";
 
 export const GifGrid = ({ category }) => {
-  const [images, setImages] = useState([]);
-
-  const getImages = async () => {
-    const newImages = await getGifs(category);
-    setImages(newImages);
-  };
-
-  useEffect(() => {
-    getImages();
-  }, []);
+  const { images, isLoading } = useFetchGifs(category);
 
   return (
     <>
       <h3>{category}</h3>
 
+      {
+      isLoading && (<h2 className={isLoading}> Loading... </h2>)
+      }
+
       {/* images.map */}
 
-          <ol>
-          {images.map((img) => (
-            <li key={img.id}> 
-            {img.title}
-            </li>
-          ))}
-          </ol>
-          
+      <div className="card-grid">
+        {images.map((img) => (
+          <GifItem key={img.id} title={img.title} url={img.url} />
+        ))}
+      </div>
     </>
   );
 };
